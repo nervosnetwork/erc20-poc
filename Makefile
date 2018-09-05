@@ -26,6 +26,8 @@ $(SECP256K1_LIB):
 		CC=riscv32-unknown-elf-gcc LD=riscv32-unknown-elf-gcc ./configure --with-bignum=no --enable-ecmult-static-precomputation --enable-endomorphism --host=riscv32-elf && \
 		make
 
+docker-build: $(VERIFY_BIN) $(VALIDATE_BIN)
+
 cargo:
 	cargo build
 
@@ -34,4 +36,4 @@ clean:
 	cd deps/flatcc && ./scripts/cleanall.sh
 	rm -rf $(VERIFY_BIN) $(VALIDATE_BIN) c/schema
 
-.PHONY: all clean cargo
+.PHONY: all clean cargo docker-build
