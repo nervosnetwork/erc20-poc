@@ -139,16 +139,16 @@ int main(int argc, char* argv[])
   CHECK_RET(ckb_input_cell_argc(input_cells[0], &input_argc));
 
   /*
-   * 1 command name, 1 pubkey, 1 signature, 1 hash, 1 command, at least we are looking at
-   * input_argc of 5, validation script accepts 4 arguments at most, so input_argc is
-   * 8 at maximum
+   * 1 command name, 1 pubkey, 1 signature, 1 command, at least we are looking at
+   * input_argc of 4, validation script accepts 4 arguments at most, so input_argc is
+   * 7 at maximum
    */
-  if (input_argc < 5 || input_argc > 8) {
+  if (input_argc < 4 || input_argc > 7) {
     return -4;
   }
-  for (int i = 0; i < input_argc - 4; i++) {
+  for (int i = 0; i < input_argc - 3; i++) {
     size_t len = 256;
-    CHECK_RET(ckb_input_cell_argv(input_cells[0], i + 4, commands[i], &len));
+    CHECK_RET(ckb_input_cell_argv(input_cells[0], i + 3, commands[i], &len));
   }
 
   /*

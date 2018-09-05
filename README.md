@@ -82,7 +82,7 @@ Enter balance address(empty string to finish entering):
 Enter allowed address(empty string to finish entering):
 
 # Now create argv data for input cell to encode commands:
-$ ./target/debug/argv_creator cells/input1 validate pubkey signature hash transfer abc zxc 500
+$ ./target/debug/argv_creator cells/input1 validate pubkey signature transfer abc zxc 500
 # Mock cell data is now completed:
 $ tree cells
 cells
@@ -95,12 +95,11 @@ cells
 │   ├── argv4
 │   ├── argv5
 │   ├── argv6
-│   ├── argv7
 │   └── data
 └── output1
     └── data
 
-2 directories, 11 files
+2 directories, 10 files
 # Run the validate script
 $ spike pk ./build/validate 0 1 input1 1 output1
 # Return code of 0 means that validation succeeds
