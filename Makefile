@@ -1,5 +1,5 @@
 CC := riscv32-unknown-elf-gcc
-CFLAGS := -Ideps/secp256k1/include -Ic/schema -Ideps/flatcc/include -DCKB_IMPL_LIBC
+CFLAGS := -Ideps/secp256k1/include -Ic/schema -Ideps/flatcc/include -DCKB_IMPL_LIBC -O3
 SECP256K1_LIB := deps/secp256k1/.libs/libsecp256k1.a
 VERIFY_BIN := build/verify
 VALIDATE_BIN := build/validate
@@ -31,6 +31,7 @@ cargo:
 
 clean:
 	cd deps/secp256k1 && make clean
+	cd deps/flatcc && ./scripts/cleanall.sh
 	rm -rf $(VERIFY_BIN) $(VALIDATE_BIN) c/schema
 
 .PHONY: all clean cargo
