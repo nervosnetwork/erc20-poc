@@ -30,6 +30,8 @@ $ echo $?
 # We can see this fails
 ```
 
+NOTE there's one gotcha here: for maximum security, we should really include pubkey inside the script, not as an argument passed into the script. Here we are using it as an argument for ease of debugging, in production we shouldn't pass pubkey as a parameter here.
+
 ## How to validate ERC20 contract
 
 ```bash
