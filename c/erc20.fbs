@@ -1,0 +1,23 @@
+namespace ERC20.Sample;
+
+table Balance {
+  address:string;
+  tokens:uint64;
+}
+
+table Allowed {
+  address:string;
+  spender:string;
+  tokens:uint64;
+}
+
+table Data {
+  balances:[Balance];
+  allowed:[Allowed];
+
+  owner:string;
+  new_owner:string;
+  total_supply:uint64;
+}
+
+root_type Data;

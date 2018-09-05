@@ -1,0 +1,64 @@
+[[package]]
+name = "cc"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "ckb-erc20"
+version = "0.1.0"
+dependencies = [
+ "flatbuffers 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "secp256k1 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "flatbuffers"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "smallvec 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "libc"
+version = "0.2.43"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "secp256k1"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "cc 1.0.23 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.43 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "smallvec"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "unreachable 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "unreachable"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "void 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "void"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[metadata]
+"checksum cc 1.0.23 (registry+https://github.com/rust-lang/crates.io-index)" = "c37f0efaa4b9b001fa6f02d4b644dee4af97d3414df07c51e3e4f015f3a3e131"
+"checksum flatbuffers 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4eeb4fe045ee07bf3587277fcddcfbb34b7cd6eee36fc0bba6ba6cd5eb29330f"
+"checksum libc 0.2.43 (registry+https://github.com/rust-lang/crates.io-index)" = "76e3a3ef172f1a0b9a9ff0dd1491ae5e6c948b94479a3021819ba7d860c8645d"
+"checksum secp256k1 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)" = "09b9a83dad1ca45195bf788cba1bb4bef2415133cd6f0a97a4da56462e4b824d"
+"checksum smallvec 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)" = "153ffa32fd170e9944f7e0838edf824a754ec4c1fc64746fcc9fe1f8fa602e5d"
+"checksum unreachable 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "382810877fe448991dfc7f0dd6e3ae5d58088fd0ea5e35189655f84e6814fa56"
+"checksum void 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)" = "6a02e4885ed3bc0f2de90ea6dd45ebcbb66dacffe03547fadbb0eeae2770887d"

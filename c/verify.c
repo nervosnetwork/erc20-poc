@@ -88,6 +88,10 @@ int main(int argc, char* argv[])
   CHECK_LEN(len);
   secp256k1_ecdsa_signature signature;
   secp256k1_ecdsa_signature_parse_der(context, &signature, buf, len);
+  if (ret == 0) {
+    secp256k1_context_destroy(context);
+    return 3;
+  }
 
   SHA256_CTX sha256_ctx;
   unsigned char hash[SHA256_BLOCK_SIZE];

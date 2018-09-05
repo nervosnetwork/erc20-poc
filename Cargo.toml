@@ -1,0 +1,17 @@
+[package]
+name = "ckb-erc20"
+version = "0.1.0"
+authors = ["Xuejie Xiao <xxuejie@gmail.com>"]
+autobins = false
+
+[dependencies]
+secp256k1 = "0.11.1"
+flatbuffers = "0.4.0"
+
+[[bin]]
+name ="cell_creator"
+path = "src/cell_creator.rs"
+
+[[bin]]
+name ="argv_creator"
+path = "src/argv_creator.rs"

@@ -2,3 +2,5 @@
 **/*.rs.bk
 
 build/
+c/schema/
+cells/
