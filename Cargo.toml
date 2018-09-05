@@ -7,6 +7,9 @@ autobins = false
 [dependencies]
 secp256k1 = "0.11.1"
 flatbuffers = "0.4.0"
+rand = "0.5.5"
+hex = "0.3.2"
+sha2 = "0.7.1"
 
 [[bin]]
 name ="cell_creator"
@@ -15,3 +18,11 @@ path = "src/cell_creator.rs"
 [[bin]]
 name ="argv_creator"
 path = "src/argv_creator.rs"
+
+[[bin]]
+name ="secp256k1_signer"
+path = "src/secp256k1_signer.rs"
+
+[[bin]]
+name ="private_key_generator"
+path = "src/private_key_generator.rs"
