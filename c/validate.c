@@ -1,5 +1,7 @@
 #include "ckb.h"
 
+#include <stdio.h>
+
 #include "erc20_reader.h"
 #include "erc20.h"
 

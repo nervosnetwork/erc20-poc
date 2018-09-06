@@ -10,6 +10,7 @@ flatbuffers = "0.4.0"
 rand = "0.5.5"
 hex = "0.3.2"
 sha2 = "0.7.1"
+ckb-riscv = { path = "deps/ckb-riscv" }
 
 [[bin]]
 name ="cell_creator"
@@ -26,3 +27,7 @@ path = "src/secp256k1_signer.rs"
 [[bin]]
 name ="private_key_generator"
 path = "src/private_key_generator.rs"
+
+[[bin]]
+name ="riscv"
+path = "src/riscv.rs"

@@ -1,14 +1,18 @@
 CC := riscv32-unknown-elf-gcc
-CFLAGS := -Ideps/secp256k1/include -Ic/schema -Ideps/flatcc/include -DCKB_IMPL_LIBC -O3
+CFLAGS := -Ideps/secp256k1/include -Ic/schema -Ideps/flatcc/include -O3
 SECP256K1_LIB := deps/secp256k1/.libs/libsecp256k1.a
 VERIFY_BIN := build/verify
 VALIDATE_BIN := build/validate
+SPIKE_VALIDATE_BIN := build/validate_spike
 FLATCC := deps/flatcc/bin/flatcc
 
-all: $(VERIFY_BIN) $(VALIDATE_BIN) cargo
+all: $(VERIFY_BIN) $(VALIDATE_BIN) $(SPIKE_VALIDATE_BIN) cargo
 
-$(VALIDATE_BIN): c/validate.c c/erc20.h c/ckb.h c/schema/erc20_reader.h
-	$(CC) $(CFLAGS) -o $@ $<
+$(VALIDATE_BIN): c/validate.c c/erc20.h c/ckb.h c/ckb_impl_syscall.h c/schema/erc20_reader.h
+	$(CC) $(CFLAGS) -o $@ $< -DCKB_IMPL_SYSCALL
+
+$(SPIKE_VALIDATE_BIN): c/validate.c c/erc20.h c/ckb.h c/ckb_impl_libc.h c/schema/erc20_reader.h
+	$(CC) $(CFLAGS) -o $@ $< -DCKB_IMPL_LIBC
 
 c/schema/erc20_reader.h: c/erc20.fbs $(FLATCC)
 	mkdir -p ./c/schema
@@ -26,7 +30,7 @@ $(SECP256K1_LIB):
 		CC=riscv32-unknown-elf-gcc LD=riscv32-unknown-elf-gcc ./configure --with-bignum=no --enable-ecmult-static-precomputation --enable-endomorphism --host=riscv32-elf && \
 		make
 
-docker-build: $(VERIFY_BIN) $(VALIDATE_BIN)
+docker-build: $(VERIFY_BIN) $(VALIDATE_BIN) $(SPIKE_VALIDATE_BIN)
 
 cargo:
 	cargo build
@@ -34,6 +38,6 @@ cargo:
 clean:
 	cd deps/secp256k1 && make clean
 	cd deps/flatcc && ./scripts/cleanall.sh
-	rm -rf $(VERIFY_BIN) $(VALIDATE_BIN) c/schema
+	rm -rf $(VERIFY_BIN) $(VALIDATE_BIN) $(SPIKE_VALIDATE_BIN) c/schema
 
 .PHONY: all clean cargo docker-build

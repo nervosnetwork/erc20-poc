@@ -18,15 +18,15 @@ Signature: 3045022100a2fe2d3ea288542f1bfc85369828cd357e970437f05e0e1f121d4777621
 # Note all the arguments after the private key is included in the signature calculation, in this case, `foo` and `bar` are used
 
 # Now we can verify a signature
-$ spike pk build/verify 0326b0a7a88857d2d802c1b286a021eac8f7c13f8f5b4a2d1e4af4c6829903648f 0326b0a7a88857d2d802c1b286a021eac8f7c13f8f5b4a2d1e4af4c6829903648f foo bar
+$ ./target/debug/riscv build/verify 0326b0a7a88857d2d802c1b286a021eac8f7c13f8f5b4a2d1e4af4c6829903648f 3045022100a2fe2d3ea288542f1bfc85369828cd357e970437f05e0e1f121d477762105a1c02206648ee22e2ef5eb9ee63e0454f977a1c48cb706fc5db7f70fc0237b7905c0343 foo bar
+Result: Ok(0)
+Running time: 2.477195458s
 # Return code of 0 means validation succeeds
-$ echo $?
-0
 
 # We can also try verifying an invalid signature
-$ spike pk build/verify 0326b0a7a88857d2d802c1b286a021eac8f7c13f8f5b4a2d1e4af4c6829903648f 3045022100a2fe2d3ea288542f1bfc85369828cd357e970437f05e0e1f121d477762105a1c02206648ee22e2ef5eb9ee63e0454f977a1c48cb706fc5db7f70fc0237b7905c0343 foo bar invalid part
-$ echo $?
-2
+$ ./target/debug/riscv build/verify 0326b0a7a88857d2d802c1b286a021eac8f7c13f8f5b4a2d1e4af4c6829903648f 3045022100a2fe2d3ea288542f1bfc85369828cd357e970437f05e0e1f121d477762105a1c02206648ee22e2ef5eb9ee63e0454f977a1c48cb706fc5db7f70fc0237b7905c0343 foo bar invalid part
+Result: Ok(2)
+Running time: 2.572639914s
 # We can see this fails
 ```
 
@@ -101,10 +101,10 @@ cells
 
 2 directories, 10 files
 # Run the validate script
-$ spike pk ./build/validate 0 1 input1 1 output1
+$ ./target/debug/riscv ./build/validate 0 1 input1 1 output1
+Result: Ok(0)
+Running time: 847.458639ms
 # Return code of 0 means that validation succeeds
-$ echo $?
-0
 
 # We can create an error output as well and try to validate that:
 $ mkdir -p cells/error-output1
@@ -130,9 +130,9 @@ Enter balance address(empty string to finish entering):
 Enter allowed address(empty string to finish entering):
 
 # This time it won't work:
-$ spike pk ./build/validate 0 1 input1 1 error-output1
-$ echo $?
-250
+$ ./target/debug/riscv ./build/validate 0 1 input1 1 error-output1
+Result: Ok(250)
+Running time: 746.556008ms
 ```
 
 ## Docker solution

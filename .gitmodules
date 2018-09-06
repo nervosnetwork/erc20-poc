@@ -4,3 +4,6 @@
 [submodule "deps/flatcc"]
 	path = deps/flatcc
 	url = https://github.com/dvidelabs/flatcc
+[submodule "deps/ckb-riscv"]
+	path = deps/ckb-riscv
+	url = git@github.com:NervosFoundation/ckb-riscv.git
