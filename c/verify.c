@@ -1,7 +1,28 @@
 #include <stdlib.h>
-#include <secp256k1.h>
-
 #include "sha256.h"
+
+#define CUSTOM_ABORT 1
+#define CUSTOM_PRINT_ERR 1
+
+#include <machine/syscall.h>
+void custom_abort()
+{
+  syscall_errno(93, 10, 0, 0, 0, 0, 0);
+}
+
+int custom_print_err(const char * arg, ...)
+{
+  (void) arg;
+  return 0;
+}
+
+#include <secp256k1_static.h>
+/*
+ * We are including secp256k1 implementation directly so gcc can strip
+ * unused functions. For some unknown reasons, if we link in libsecp256k1.a
+ * directly, the final binary will include all functions rather than those used.
+ */
+#include <secp256k1.c>
 
 int char_to_int(char ch)
 {
@@ -70,26 +91,30 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  secp256k1_context *context = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY);
-  secp256k1_context_set_illegal_callback(context, callback, NULL);
-  secp256k1_context_set_error_callback(context, callback, NULL);
+  secp256k1_context context;
+  int ret = secp256k1_context_initialize(&context, SECP256K1_CONTEXT_VERIFY);
+  if (ret == 0) {
+    return 4;
+  }
+  secp256k1_context_set_illegal_callback(&context, callback, NULL);
+  secp256k1_context_set_error_callback(&context, callback, NULL);
 
   len = hex_to_bin(buf, 65, argv[1]);
   CHECK_LEN(len);
   secp256k1_pubkey pubkey;
 
-  int ret = secp256k1_ec_pubkey_parse(context, &pubkey, buf, len);
+  ret = secp256k1_ec_pubkey_parse(&context, &pubkey, buf, len);
   if (ret == 0) {
-    secp256k1_context_destroy(context);
+    secp256k1_context_deinitialize(&context);
     return 1;
   }
 
   len = hex_to_bin(buf, 256, argv[2]);
   CHECK_LEN(len);
   secp256k1_ecdsa_signature signature;
-  secp256k1_ecdsa_signature_parse_der(context, &signature, buf, len);
+  secp256k1_ecdsa_signature_parse_der(&context, &signature, buf, len);
   if (ret == 0) {
-    secp256k1_context_destroy(context);
+    secp256k1_context_deinitialize(&context);
     return 3;
   }
 
@@ -105,13 +130,13 @@ int main(int argc, char* argv[])
   sha256_update(&sha256_ctx, hash, SHA256_BLOCK_SIZE);
   sha256_final(&sha256_ctx, hash);
 
-  ret = secp256k1_ecdsa_verify(context, &signature, hash, &pubkey);
+  ret = secp256k1_ecdsa_verify(&context, &signature, hash, &pubkey);
   if (ret == 1) {
     ret = 0;
   } else {
     ret = 2;
   }
 
-  secp256k1_context_destroy(context);
+  secp256k1_context_deinitialize(&context);
   return ret;
 }

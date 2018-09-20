@@ -1,6 +1,7 @@
 CC := riscv32-unknown-elf-gcc
-CFLAGS := -Ideps/secp256k1/include -Ic/schema -Ideps/flatcc/include -O3
-SECP256K1_LIB := deps/secp256k1/.libs/libsecp256k1.a
+CFLAGS := -Ideps/secp256k1/src -Ideps/secp256k1 -Ic/schema -Ideps/flatcc/include -O3
+LDFLAGS := -Wl,-static -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-s
+SECP256K1_LIB := deps/secp256k1/src/ecmult_static_pre_context.h
 VERIFY_BIN := build/verify
 VALIDATE_BIN := build/validate
 SPIKE_VALIDATE_BIN := build/validate_spike
@@ -19,7 +20,7 @@ c/schema/erc20_reader.h: c/erc20.fbs $(FLATCC)
 	$(FLATCC) -c --reader -o ./c/schema ./c/erc20.fbs
 
 $(VERIFY_BIN): c/verify.c $(SECP256K1_LIB)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
 
 $(FLATCC):
 	cd deps/flatcc && scripts/build.sh
@@ -28,7 +29,7 @@ $(SECP256K1_LIB):
 	cd deps/secp256k1 && \
 		./autogen.sh && \
 		CC=riscv32-unknown-elf-gcc LD=riscv32-unknown-elf-gcc ./configure --with-bignum=no --enable-ecmult-static-precomputation --enable-endomorphism --host=riscv32-elf && \
-		make
+		make src/ecmult_static_pre_context.h src/ecmult_static_context.h
 
 docker-build: $(VERIFY_BIN) $(VALIDATE_BIN) $(SPIKE_VALIDATE_BIN)
 
