@@ -56,10 +56,6 @@ int hex_to_bin(char* buf, size_t buf_len, const char* hex)
   return i;
 }
 
-void callback(const char* message, void* data) {
-  exit(10);
-}
-
 #define CHECK_LEN(x) if ((x) <= 0) { return x; }
 
 /*
@@ -96,8 +92,6 @@ int main(int argc, char* argv[])
   if (ret == 0) {
     return 4;
   }
-  secp256k1_context_set_illegal_callback(&context, callback, NULL);
-  secp256k1_context_set_error_callback(&context, callback, NULL);
 
   len = hex_to_bin(buf, 65, argv[1]);
   CHECK_LEN(len);
