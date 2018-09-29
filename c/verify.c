@@ -1,5 +1,7 @@
 #include <stdlib.h>
-#include "sha256.h"
+#include "sha3.h"
+
+#define SHA3_BLOCK_SIZE 32
 
 #define CUSTOM_ABORT 1
 #define CUSTOM_PRINT_ERR 1
@@ -99,7 +101,6 @@ int main(int argc, char* argv[])
 
   ret = secp256k1_ec_pubkey_parse(&context, &pubkey, buf, len);
   if (ret == 0) {
-    secp256k1_context_deinitialize(&context);
     return 1;
   }
 
@@ -108,21 +109,20 @@ int main(int argc, char* argv[])
   secp256k1_ecdsa_signature signature;
   secp256k1_ecdsa_signature_parse_der(&context, &signature, buf, len);
   if (ret == 0) {
-    secp256k1_context_deinitialize(&context);
     return 3;
   }
 
-  SHA256_CTX sha256_ctx;
-  unsigned char hash[SHA256_BLOCK_SIZE];
-  sha256_init(&sha256_ctx);
+  sha3_ctx_t sha3_ctx;
+  unsigned char hash[SHA3_BLOCK_SIZE];
+  sha3_init(&sha3_ctx, SHA3_BLOCK_SIZE);
   for (int i = 3; i < argc; i++) {
-    sha256_update(&sha256_ctx, argv[i], strlen(argv[i]));
+    sha3_update(&sha3_ctx, argv[i], strlen(argv[i]));
   }
-  sha256_final(&sha256_ctx, hash);
+  sha3_final(hash, &sha3_ctx);
 
-  sha256_init(&sha256_ctx);
-  sha256_update(&sha256_ctx, hash, SHA256_BLOCK_SIZE);
-  sha256_final(&sha256_ctx, hash);
+  sha3_init(&sha3_ctx, SHA3_BLOCK_SIZE);
+  sha3_update(&sha3_ctx, hash, SHA3_BLOCK_SIZE);
+  sha3_final(hash, &sha3_ctx);
 
   ret = secp256k1_ecdsa_verify(&context, &signature, hash, &pubkey);
   if (ret == 1) {
@@ -131,6 +131,5 @@ int main(int argc, char* argv[])
     ret = 2;
   }
 
-  secp256k1_context_deinitialize(&context);
   return ret;
 }
