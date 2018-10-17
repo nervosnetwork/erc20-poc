@@ -10,8 +10,8 @@ FLATCC := deps/flatcc/bin/flatcc
 
 all: $(ALWAYS_SUCCESS_BIN) $(VERIFY_BIN) $(VALIDATE_BIN) $(SPIKE_VALIDATE_BIN) cargo
 
-$(ALWAYS_SUCCESS_BIN): c/always_success.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
+$(ALWAYS_SUCCESS_BIN): c/always_success.S
+	$(CC) $(CFLAGS) $(LDFLAGS) -nostdlib -nostartfiles -o $@ $<
 
 $(VALIDATE_BIN): c/validate.c c/erc20.h c/ckb.h c/ckb_impl_syscall.h c/schema/erc20_reader.h
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -DCKB_IMPL_SYSCALL
