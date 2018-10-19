@@ -1,6 +1,6 @@
-extern crate ckb_riscv;
+extern crate ckb_vm;
 
-use ckb_riscv::run;
+use ckb_vm::{run, SparseMemory};
 use std::env;
 use std::fs::File;
 use std::io::Read;
@@ -14,7 +14,8 @@ fn main() {
     file.read_to_end(&mut buffer).unwrap();
 
     let start = Instant::now();
-    let result = run(&buffer, &args);
+    let args2: Vec<Vec<u8>> = args.iter().map(|a| a.clone().into_bytes()).collect();
+    let result = run::<u64, SparseMemory>(&buffer, &args2);
     let end = Instant::now();
 
     println!("Result: {:?}", result);

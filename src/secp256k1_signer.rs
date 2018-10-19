@@ -1,11 +1,11 @@
-extern crate sha2;
+extern crate tiny_keccak;
 extern crate hex;
 extern crate secp256k1;
 
 use hex::{encode, decode};
 use std::env;
 use secp256k1::{Secp256k1, Message, SecretKey, PublicKey};
-use sha2::{Sha256, Digest};
+use tiny_keccak::Keccak;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -26,15 +26,17 @@ fn main() {
 
     let public_key = PublicKey::from_secret_key(&secp, &key);
 
-    let mut hasher = Sha256::default();
+    let mut hasher = Keccak::new_sha3_256();
     for arg in args.iter().skip(2) {
-        hasher.input(arg.as_bytes());
+        hasher.update(arg.as_bytes());
     }
-    let output = hasher.result();
+    let mut output: [u8; 32] = [0; 32];
+    hasher.finalize(&mut output);
 
-    let mut hasher = Sha256::default();
-    hasher.input(&output);
-    let output = hasher.result();
+    let mut hasher = Keccak::new_sha3_256();
+    hasher.update(&output);
+    let mut output: [u8; 32] = [0; 32];
+    hasher.finalize(&mut output);
 
     let message = Message::from_slice(&output).unwrap();
 
