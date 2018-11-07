@@ -6,7 +6,7 @@
 
 #define MAX_FILENAME_LENGTH 256
 
-#include <machine/syscall.h>
+#include "syscall.h"
 
 #define SYS_ckb_mmap_cell 2049
 #define SYS_ckb_input_cell_argc 2050

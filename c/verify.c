@@ -6,7 +6,7 @@
 #define CUSTOM_ABORT 1
 #define CUSTOM_PRINT_ERR 1
 
-#include <machine/syscall.h>
+#include "syscall.h"
 void custom_abort()
 {
   syscall_errno(93, 10, 0, 0, 0, 0, 0);
